@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+  abc = _.filter([1,2,3], (a) => a != 2);
 }
