@@ -1,7 +1,17 @@
 <div class="container">
   <div class="row">
     <div class="col col-xs-5">
-      <button class="btn btn-primary" ng-click="select(true)">Source: {{ graph.find(source) || 'Click to set Source'}}</button>
+      <button class="btn btn-primary" (click)="onSourceBtnClick($event)">Source:
+        <span *ngIf="(sourceNode && graph.find(sourceNode.id))">
+          {{graph.find(sourceNode.id) | json}}
+        </span>
+        <span *ngIf="!(sourceNode && graph.find(sourceNode.id))">
+          'Click to set Source'
+        </span>
+
+
+
+      </button>
     </div>
     <div class="col col-xs-1">
       <button class="btn btn-warning" ng-click="clear()">Clear Path</button>
@@ -18,7 +28,7 @@
 <div class="container">
   <div class="graph row" *ngFor="let rowIndex of [0, 1, 2, 3, 4, 5]">
     <div class="col col-xs-2" *ngFor="let colIndex of nodesArr.slice(rowIndex*6,(rowIndex+1)*6)">
-      <div class="rectangle-container">
+      <div class="rectangle-container" (click)="onNodeContainerClick($event, colIndex)">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
           <rect id="1" class="node-rect" />
           <text class="node-text" x="50%" y="50%" text-anchor="middle" font-size="24" font-weight="600">

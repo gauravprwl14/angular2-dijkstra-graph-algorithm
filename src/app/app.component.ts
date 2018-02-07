@@ -7,10 +7,10 @@ import GraphModel from "../model/graph.model";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ['./app.component.scss']
+  styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnInit {
-  title = 'app';
+  title = "app";
   sourceNode = null;
   isSourceNodeSelected = false;
   targetNode = null;
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
   createGraph() {
     const graphNodesArr = [];
     this.graph = new GraphModel(GraphMasterData);
-    console.log('%c this.graph ', 'background: lime; color: black', this.graph);
+    console.log("%c this.graph ", "background: lime; color: black", this.graph);
     console.log(
       '%c typeof  ',
       'background: lime; color: black',
@@ -42,17 +42,49 @@ export class AppComponent implements OnInit {
     );
   }
 
-  onNodeContainerClick(e) {
-    const targetNodeObj = e.target.value;
+  onNodeContainerClick(e, nodeObj) {
+    const targetNodeObj = nodeObj;
     const id = targetNodeObj.id;
     const weight = targetNodeObj.weight;
     const nType = targetNodeObj.nType;
     const neighbors = targetNodeObj.neighbors;
     if (!this.isSourceNodeSelected) {
       this.sourceNode = new GraphNodeModel(id, weight, nType, neighbors);
-      this.isSourceNodeSelected = true;
     } else {
       this.targetNode = new GraphNodeModel(id, weight, nType, neighbors);
     }
+
+    console.log(
+      '%c this.sourceNode ',
+      'background: lime; color: black',
+      this.sourceNode
+    );
+    console.log(
+      '%c this.targetNode ',
+      'background: lime; color: black',
+      this.targetNode
+    );
+
+    if (this.sourceNode) {
+      console.log(
+        '%c graph.find(source) ',
+        'background: aqua; color: black',
+        this.graph.find(this.sourceNode.id)
+      );
+    }
+  }
+
+  onSourceBtnClick(e) {
+    if (e) {
+      e.preventDefault();
+    }
+    if (this.sourceNode) {
+      this.isSourceNodeSelected = true;
+    }
+    console.log(
+      '%c inside onSourceBtnClick ',
+      'background: salmon; color: black',
+      this.isSourceNodeSelected
+    );
   }
 }
