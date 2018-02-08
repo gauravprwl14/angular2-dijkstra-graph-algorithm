@@ -19,7 +19,7 @@
         <span *ngIf="(targetNode && graph.find(targetNode.id))">
           {{graph.find(targetNode.id) | json}}
         </span>
-        <span *ngIf="!(sourceNode && graph.find(sourceNode.id))">
+        <span *ngIf="!(targetNode && graph.find(targetNode.id))">
           'Click to set Target'
         </span>
       </button>
