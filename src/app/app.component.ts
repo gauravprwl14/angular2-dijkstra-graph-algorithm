@@ -123,4 +123,19 @@ export class AppComponent implements OnInit {
       this.isSourceNodeSelected
     );
   }
+
+  onClearPathClick() {
+    this.sourceNode = null;
+    this.isSourceNodeSelected = false;
+    this.targetNode = null;
+    this.dist = 0;
+
+    this.graph = null;
+    this.nodesArr = null;
+    this.cacheGraphResult = null;
+
+    this.dijkstraModelObject = new DijkstraModel();
+
+    this.createGraph();
+  }
 }
