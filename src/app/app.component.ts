@@ -32,15 +32,15 @@ export class AppComponent implements OnInit {
     console.log("%c this.graph ", "background: lime; color: black", this.graph);
     console.log(
       "%c typeof  ",
-      "background: lime; color: black",
+      'background: lime; color: black',
       typeof this.graph.nodes
     );
     this.nodesArr = Object.keys(this.graph.nodes).map(
       nodeKeys => this.graph.nodes[nodeKeys]
     );
     console.log(
-      "%c nodesArr ",
-      "background: lime; color: black",
+      '%c nodesArr ',
+      'background: lime; color: black',
       this.nodesArr
     );
   }
@@ -81,30 +81,31 @@ export class AppComponent implements OnInit {
     }
 
     if (this.sourceNode && this.targetNode) {
+      this.dijkstraModelObject = new DijkstraModel();
       const dijResults = this.runDijkstra(1, this.sourceNode, this.targetNode);
       const shortestPath = this.getShortestPath();
       console.log(
-        "%c dijkstra result ",
-        "background: aqua; color: black",
+        '%c dijkstra result ',
+        'background: aqua; color: black',
         dijResults
       );
     }
 
     console.log(
-      "%c this.sourceNode ",
-      "background: lime; color: black",
+      '%c this.sourceNode ',
+      'background: lime; color: black',
       this.sourceNode
     );
     console.log(
-      "%c this.targetNode ",
-      "background: lime; color: black",
+      '%c this.targetNode ',
+      'background: lime; color: black',
       this.targetNode
     );
 
     if (this.sourceNode) {
       console.log(
-        "%c graph.find(source) ",
-        "background: aqua; color: black",
+        '%c graph.find(source) ',
+        'background: aqua; color: black',
         this.graph.find(this.sourceNode.id)
       );
     }
@@ -118,8 +119,8 @@ export class AppComponent implements OnInit {
       this.isSourceNodeSelected = true;
     }
     console.log(
-      "%c inside onSourceBtnClick ",
-      "background: salmon; color: black",
+      '%c inside onSourceBtnClick ',
+      'background: salmon; color: black',
       this.isSourceNodeSelected
     );
   }
