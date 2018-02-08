@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import GraphMasterData from "../utils/masterDataForTheGraph";
 import GraphNodeModel from "../model/graphNode.model";
 import GraphModel from "../model/graph.model";
-
+import DijkstraModel from "../model/dijkstra.model";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -18,6 +18,9 @@ export class AppComponent implements OnInit {
 
   graph = null;
   nodesArr = null;
+  cacheGraphResult = null;
+
+  dijkstraModelObject = new DijkstraModel();
 
   ngOnInit() {
     this.createGraph();
@@ -28,7 +31,7 @@ export class AppComponent implements OnInit {
     this.graph = new GraphModel(GraphMasterData);
     console.log("%c this.graph ", "background: lime; color: black", this.graph);
     console.log(
-      '%c typeof  ',
+      "%c typeof  ",
       'background: lime; color: black',
       typeof this.graph.nodes
     );
@@ -42,6 +45,29 @@ export class AppComponent implements OnInit {
     );
   }
 
+  runDijkstra(pathType, source, target) {
+    const results = this.dijkstraModelObject.run(
+      this.graph,
+      pathType,
+      source.id,
+      target.id
+    );
+
+    this.dist = results.dist[target.id];
+    this.cacheGraphResult = results;
+
+    // cache results
+    // service.cache = results;
+    return results;
+  }
+
+  getShortestPath() {
+    const pathArr = this.dijkstraModelObject.getPath(
+      this.cacheGraphResult.prev,
+      this.cacheGraphResult.target
+    );
+  }
+
   onNodeContainerClick(e, nodeObj) {
     const targetNodeObj = nodeObj;
     const id = targetNodeObj.id;
@@ -52,6 +78,16 @@ export class AppComponent implements OnInit {
       this.sourceNode = new GraphNodeModel(id, weight, nType, neighbors);
     } else {
       this.targetNode = new GraphNodeModel(id, weight, nType, neighbors);
+    }
+
+    if (this.sourceNode && this.targetNode) {
+      const dijResults = this.runDijkstra(1, this.sourceNode, this.targetNode);
+      const shortestPath = this.getShortestPath();
+      console.log(
+        '%c dijkstra result ',
+        'background: aqua; color: black',
+        dijResults
+      );
     }
 
     console.log(

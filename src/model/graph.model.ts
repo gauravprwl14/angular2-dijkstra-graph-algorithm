@@ -1,5 +1,5 @@
-import * as _ from "lodash";
-import GraphNodeModel from "./graphNode.model";
+import * as _ from 'lodash';
+import GraphNodeModel from './graphNode.model';
 
 class Graph {
   nodeCount = 0;
@@ -8,15 +8,15 @@ class Graph {
 
   constructor(graphMasterData: { nodes: any; edges: any }) {
     for (let i = 0; i < graphMasterData.nodes.length; i++) {
-      var nodeVals = graphMasterData.nodes[i];
-      var nodeProps = {
+      const nodeVals = graphMasterData.nodes[i];
+      const nodeProps = {
         weight: nodeVals.weight,
         nType: nodeVals.nType,
         neighbors: nodeVals.neighbors
       };
       if (this.exists(nodeVals.id)) {
         // update node (was created earlier by a neighbor specification)
-        var node = this.find(nodeVals.id);
+        const node = this.find(nodeVals.id);
         nodeProps.neighbors = _.union(node.neighbors, nodeProps.neighbors);
         this.update(nodeVals.id, nodeProps);
       } else {
@@ -25,8 +25,8 @@ class Graph {
     }
     // add each of the edges in the supplied graphMasterData
     for (let i = 0; i < graphMasterData.edges.length; i++) {
-      var source = graphMasterData.edges[i][0];
-      var target = graphMasterData.edges[i][1];
+      const source = graphMasterData.edges[i][0];
+      const target = graphMasterData.edges[i][1];
       this.addOrCreateEdge(source, target);
     }
   }
@@ -40,6 +40,17 @@ class Graph {
     }
     return false;
     // return (id in this.nodes) && (this.nodes[id] instanceof GraphNodeModel);
+  }
+
+  eachNode(fn) {
+    for (const id in this.nodes) {
+      const node = this.find(id);
+      if (!!node) {
+        fn(node);
+      } else {
+        continue;
+      }
+    }
   }
 
   addNode(id, props) {

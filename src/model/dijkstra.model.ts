@@ -1,17 +1,22 @@
-import MinHeapModel from './minHeap.model';
+import MinHeapModel from "./minHeap.model";
 
 function scoreFunction(e) {
-    return e.distance
+  return e.distance;
 }
 function idFunction(e) {
-    return e.id
+  return e.id;
 }
 
 class Dijkstra {
-  unvisited = new MinHeapModel( scoreFunction, idFunction , 'distance');
+  unvisited = new MinHeapModel(scoreFunction, idFunction, "distance");
   infinity = 99999999;
   run(graph, pathType, source, target) {
     if (!graph.exists(source) || !graph.exists(target)) {
+      console.log(
+        "%c inside source or target not found ",
+        "background: salmon; color: black"
+      );
+      console.log("%c source ", "background: salmon; color: black", source);
       return null;
     }
     const ret = {
@@ -26,17 +31,38 @@ class Dijkstra {
     dist[source] = 0; // source is distance 0 from source
     prev[source] = source;
 
-    Object.keys(graph).forEach(node => {
-      if (graph[node].id !== parseInt(source, 10)) {
-        prev[graph[node].id] = null; // set previous to null
-        dist[graph[node].id] = this.infinity; // set distance to Infinity
+    console.log("%c dist ", "background: aqua; color: black", dist);
+    console.log("%c prev ", "background: aqua; color: black", prev);
+
+    graph.eachNode(node => {
+      if (node.id !== parseInt(source, 10)) {
+        prev[node.id] = null; // set previous to null
+        dist[node.id] = this.infinity; // set distance to Infinity
       }
-      const obj = {
-         id: graph[node].id,
-        distance: dist[graph[node].id]
-      }
-      this.unvisited.push(obj);
+      // push node to unvisited with distance Infinity
+      this.unvisited.push({
+        id: node.id,
+        distance: dist[node.id]
+      });
     });
+
+    console.log(
+      "%c this.unvisited ",
+      "background: lime; color: black",
+      this.unvisited
+    );
+
+    // Object.keys(graph).eachNode(node => {
+    //   if (graph[node].id !== parseInt(source, 10)) {
+    //     prev[graph[node].id] = null; // set previous to null
+    //     dist[graph[node].id] = this.infinity; // set distance to Infinity
+    //   }
+    //   const obj = {
+    //     id: graph[node].id,
+    //     distance: dist[graph[node].id]
+    //   };
+    //   this.unvisited.push(obj);
+    // });
 
     // return if source is the same as target (i.e., already there)
     if (source === target) {
@@ -46,8 +72,8 @@ class Dijkstra {
     }
 
     while (this.unvisited.size() > 0) {
-      var min = this.unvisited.pop(); // get minimum node dist and ID
-      var minNode = graph.find(min.id); // get the minimum node
+      const min = this.unvisited.pop(); // get minimum node dist and ID
+      const minNode = graph.find(min.id); // get the minimum node
 
       // stop when we've found the target
       if (minNode.id === target) {
@@ -55,8 +81,8 @@ class Dijkstra {
       }
 
       // for each neighbor of minNode that is in the unvisited queue
-      for (var i = 0; i < minNode.neighbors.length; i++) {
-        var n = graph.find(minNode.neighbors[i]); // node for the neighbor
+      for (let i = 0; i < minNode.neighbors.length; i++) {
+        const n = graph.find(minNode.neighbors[i]); // node for the neighbor
 
         // ensure node exists, is in unvisited, and it is a valid path (unless it is the target)
         if (
@@ -64,12 +90,12 @@ class Dijkstra {
           !this.unvisited.exists(n) ||
           (n.nType !== pathType && n.id !== parseInt(target, 10))
         ) {
-        //   continue;
-            return;
+          continue;
+          // return;
         }
 
         // calculate alternative distance
-        var alt = min.distance + minNode.weight;
+        const alt = min.distance + minNode.weight;
 
         // use this path instead, if alternative distance is shorter
         if (alt < dist[n.id]) {
@@ -79,6 +105,30 @@ class Dijkstra {
         }
       }
     }
+
+    ret.dist = dist;
+    ret.prev = prev;
+    console.log("%c return value  ", "background: aqua; color: black", ret);
+    return ret;
+  }
+
+  getPath(prevList, target) {
+    const path = []; // the path to return
+    let t = target;
+
+    // return [] if there was no path
+    if (prevList[target] === null) {
+      return [];
+    }
+    // while the previous is not itself (signaling reached the source)
+    while (prevList[t] !== t) {
+      path.unshift(t);
+      t = prevList[t];
+    }
+
+    path.unshift(t); // add the source to the path
+    console.log("%c path ", "background: aqua; color: black", path);
+    return path;
   }
 }
 
